@@ -19,4 +19,6 @@ public class Notification {
     String type;
 
     String message;
+
+    Boolean seen;
 }

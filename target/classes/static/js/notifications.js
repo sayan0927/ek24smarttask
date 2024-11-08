@@ -21,7 +21,7 @@ function subscribeToNotifications(client) {
         displayNotification(notif);
 
 
-       // setNotificationAsSeen(notification.notificationId, client);
+        setNotificationAsSeen(notif.id, client);
     });
 }
 

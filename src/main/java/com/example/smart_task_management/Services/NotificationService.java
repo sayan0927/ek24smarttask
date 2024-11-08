@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Service class responsible for sending notifications related to task events such as creation, completion,
@@ -37,6 +38,20 @@ public class NotificationService {
     @Autowired
     private Mailer mailer;
 
+    public void sendInAppNotification(Notification notification,TaskDTO taskDTO) {
+        webSocketSender.sendMessageToDestination("/queue/notifications/" + taskDTO.getCreator().getId(), getDTO(notification, taskDTO));
+    }
+
+    public Notification findNotificationById(Long id) {
+        return notificationRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Notification id- "+id+" not found"));
+    }
+
+    public void handleNotificationSeen(Long id) {
+        Notification notification = findNotificationById(id);
+        notification.setSeen(true);
+        notificationRepository.save(notification);
+    }
+
     /**
      * Sends reminder notifications for multiple tasks asynchronously.
      *
@@ -47,6 +62,10 @@ public class NotificationService {
         for (TaskDTO taskDTO : tasks) {
             sendReminderNotification(taskDTO);
         }
+    }
+
+    public List<Notification> getPendingNotificationsOfUser(Long userId) {
+        return notificationRepository.findByUserIdAndSeen(userId,false);
     }
 
     /**
@@ -160,6 +179,7 @@ public class NotificationService {
         Notification notification1 = new Notification();
         notification1.setTaskId(taskDTO.getId());
         notification1.setUserId(taskDTO.getCreator().getId());
+        notification1.setSeen(false);
         return notification1;
     }
 }

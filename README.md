@@ -1,0 +1,2 @@
+This project is created as part of EK24 training program.
+This project is a Task Management System built with Spring Boot that enables users to efficiently manage tasks with features for task creation, updating, and searching. Users can create, update, delete, and track their tasks, set deadlines, prioritize tasks. The Application includes user authentication, a dashboard to overview tasks, notifications  and analytic for task completion.

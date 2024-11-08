@@ -12,4 +12,6 @@ public interface NotificationRepository  extends JpaRepository<Notification, Lon
 
 
     Notification findByTaskIdAndUserIdAndType(Long taskId, Long userId,String type);
+
+    List<Notification> findByUserIdAndSeen(Long taskId,Boolean seen);
 }

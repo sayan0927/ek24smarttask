@@ -118,8 +118,10 @@ public class TaskService {
         List<TaskDTO> toNotify = new ArrayList<>();
 
         for (Task task : tasks) {
+            System.out.println("time is"+now+" "+task.getReminder());
             if (!task.getCompleted() && task.getReminder().isBefore(now)) {
                 toNotify.add(getDTOFromTask(task));
+                System.out.println("added");
             }
         }
 
