@@ -23,5 +23,17 @@ public class TaskDTO {
     private LocalDateTime reminder;
     private UserDTO creator;
 
+    public boolean isDeadlineValid() {
+        return deadline != null && deadline.isAfter(LocalDateTime.now());
+    }
+
+
+    public boolean isReminderValid() {
+        if (reminder == null) {
+            return true;
+        }
+        return reminder.isAfter(LocalDateTime.now()) && reminder.isBefore(deadline);
+    }
+
 
 }

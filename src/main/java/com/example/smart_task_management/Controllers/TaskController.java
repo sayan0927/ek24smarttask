@@ -55,6 +55,14 @@ public class TaskController {
     })
     @PostMapping
     public ResponseEntity<?> createTask(@Valid @RequestBody TaskDTO taskDTO, Authentication authentication) {
+
+        if(!taskDTO.isDeadlineValid())
+            return new ResponseEntity<>("Deadline us not valid", HttpStatus.BAD_REQUEST);
+
+        if (!taskDTO.isReminderValid()) {
+            return new ResponseEntity<>("Reminder is not valid", HttpStatus.BAD_REQUEST);
+        }
+
         Task task = new Task();
         task.setTitle(taskDTO.getTitle());
         task.setDescription(taskDTO.getDescription());
@@ -168,6 +176,8 @@ public class TaskController {
             return new ResponseEntity<>("Unauthorized Access", HttpStatus.FORBIDDEN);
         }
 
+
+
         List<Task> tasks;
 
         if (title.isEmpty() && description.isEmpty())
@@ -209,6 +219,13 @@ public class TaskController {
         // Ensure that the authenticated user owns the task
         if (!loggedInUserDetails.getUserId().equals(existingTask.getUser().getId())) {
             return new ResponseEntity<>("Unauthorized update request", HttpStatus.FORBIDDEN);
+        }
+
+        if(!taskDTO.isDeadlineValid())
+            return new ResponseEntity<>("Deadline us not valid", HttpStatus.BAD_REQUEST);
+
+        if (!taskDTO.isReminderValid()) {
+            return new ResponseEntity<>("Reminder is not valid", HttpStatus.BAD_REQUEST);
         }
 
         // Update the fields of the existing task with new data from taskDTO
