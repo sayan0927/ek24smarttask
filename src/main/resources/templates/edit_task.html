@@ -1,0 +1,101 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Home </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+
+    <div id="data" th:data-currentUserId="${user_details.getUserId()}"
+         th:data-currentUserName="${user_details.getUsername()}">
+        <script th:src="@{/js/notifications.js}" th:inline="javascript"></script>
+        <script th:src="@{/js/tasks.js}" th:inline="javascript"></script>
+    </div>
+
+
+</head>
+<body class="bg-gray-100">
+
+
+<div class="main-container">
+
+
+    <div class="text-center">
+
+        <a th:href="@{/}">Home</a>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a href="/admin/page">Admin</a>
+        </div>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+
+
+
+
+    <br><br>
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+        <h2 class="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Edit Task</h2>
+
+        <form id="update_task_form" th:action="@{/tasks/{taskId}(taskId=${taskDTO.getId()})}" th:object="${taskDTO}" method="put">
+
+            <label for="title_update" class="block text-sm font-medium leading-6 text-gray-900">Title:</label>
+            <input type="text" name="title" id="title_update" th:field="*{title}"
+                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <label for="description_update" class="block text-sm font-medium leading-6 text-gray-900">Description:</label>
+            <input type="text" name="description" id="description_update" th:field="*{description}"
+                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <h2 class="mt-2 text-center text-xl leading-9 tracking-tight text-gray-900">Edit Task Details</h2>
+
+            <label for="priority_update" class="block mb-2 text-gray-900">Select Priority</label>
+            <select id="priority_update" name="priority" th:field="*{priority}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="0" th:selected="*{priority == 0}">High</option>
+                <option value="1" th:selected="*{priority == 1}">Medium</option>
+                <option value="2" th:selected="*{priority == 2}">Low</option>
+            </select>
+
+            <label for="deadline"  class="block text-sm font-medium leading-6 text-gray-900">Deadline:</label>
+            <input type="datetime-local" th:field="*{deadline}" name="deadline" id="deadline" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <label for="reminder"  class="block text-sm font-medium leading-6 text-gray-900">Reminder (optional):</label>
+            <input type="datetime-local" th:field="${taskDTO.reminder}" name="reminder" id="reminder" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+            <br>
+
+            <button type="button" th:onclick="'javascript:editTask(' + ${taskDTO.getId()} + ')'" class="flex w-full justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Update Task
+            </button>
+
+        </form>
+
+
+        <br>
+
+
+
+    </div>
+    <br><br>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+</body>
+</html>

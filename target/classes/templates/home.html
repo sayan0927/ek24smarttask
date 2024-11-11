@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Home </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+
+    <div id="data" th:data-currentUserId="${user_details.getUserId()}"
+         th:data-currentUserName="${user_details.getUsername()}">
+        <script th:src="@{/js/notifications.js}" th:inline="javascript"></script>
+        <script th:src="@{/js/tasks.js}" th:inline="javascript"></script>
+    </div>
+
+
+</head>
+<body class="bg-gray-100">
+
+
+<div class="main-container">
+
+
+    <div class="text-center">
+
+        <a th:href="@{/tasks/page}">My Tasks</a>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a href="/admin/page">Admin</a>
+        </div>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+        <h2 class="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Create a New Task</h2>
+        <br>
+        <form id="create_task_form" th:action="@{/tasks}" th:object="${taskDTO}" method="post">
+
+            <label for="title" class="block text-sm font-medium leading-6 text-gray-900" >Title:</label>
+            <input type="text" th:field="${taskDTO.title}" name="title" id="title" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <label for="description" class="block text-sm font-medium leading-6 text-gray-900" >Description:</label>
+            <input type="text" th:field="${taskDTO.description}" name="description" id="description" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <label for="deadline"  class="block text-sm font-medium leading-6 text-gray-900">Deadline:</label>
+            <input type="datetime-local" th:field="${taskDTO.deadline}" name="deadline" id="deadline" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+
+            <label for="priority" class="block text-sm font-medium leading-6 text-gray-900">Priority:</label>
+            <select th:field="${taskDTO.priority}" name="priority" id="priority" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="0">High</option>
+                <option value="1">Medium</option>
+                <option value="2">Low</option>
+            </select>
+
+            <label for="reminder"  class="block text-sm font-medium leading-6 text-gray-900">Reminder (optional):</label>
+            <input type="datetime-local" th:field="${taskDTO.reminder}" name="reminder" id="reminder" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+
+            <div>
+                <button type="button" onclick="createTask()" class="flex w-full justify-center rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+            </div>
+        </form>
+
+    </div>
+
+
+    <br><br>
+
+
+
+
+
+
+
+</div>
+
+
+</body>
+</html>

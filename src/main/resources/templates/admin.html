@@ -1,0 +1,122 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Admin </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+
+    <div id="data" th:data-currentUserId="${user_details.getUserId()}"
+         th:data-currentUserName="${user_details.getUsername()}">
+        <script th:src="@{/js/notifications.js}" th:inline="javascript"></script>
+        <script th:src="@{/js/admin.js}" th:inline="javascript"></script>
+    </div>
+
+
+</head>
+<body class="bg-gray-100">
+
+
+<div class="main-container">
+
+
+    <div class="text-center">
+
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+    <h2 class="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Registered Users</h2>
+
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full mb-5 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+
+                <th scope="col" class="px-6 py-3">
+                    User Id
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Username
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Email
+                </th>
+
+
+
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+
+
+
+
+
+
+                <th scope="col" class="px-6 py-3 text-ce">
+                    Action
+                </th>
+            </tr>
+            </thead>
+            <tbody >
+
+
+            <th:block th:each="row : ${table_dto}">
+
+                <tr th:id="${row.getId()}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+
+                    <td
+                            class="px-6 py-4" th:text="${row.id}"> id
+                    </td>
+                    <td
+                            class="px-6 py-4" th:text="${row.userName}">     Uname
+                    </td>
+
+                    <td
+                            class="px-6 py-4" th:text="${row.email}">  Email
+                    </td>
+
+
+
+                    <td
+                            class="px-6 py-4 completion-status" th:text="${row.fullName}">   Name
+                    </td>
+
+
+                    <td class="px-2 py-4 flex">
+
+
+                        <div th:if="${row.id != user_details.getUserId()}">
+                            <button th:onclick="'javascript:deleteUser(' + ${row.id} + ')'" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 bg-red-500 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete</button>
+                        </div>
+
+
+                    </td>
+
+
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+</div>
+
+
+</body>
+</html>

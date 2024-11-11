@@ -1,0 +1,68 @@
+networks:
+  smarttask-net:
+  
+  
+services:
+  
+  mysqldb:
+    platform: linux/x86_64
+    image: mysql:latest
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d/
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: smart_task
+      MYSQL_PASSWORD: root
+    networks:
+      - smarttask-net
+  
+  phpmyadmin:
+    depends_on:
+      - mysqldb
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8090:80"
+    environment:
+      PMA_HOST: mysqldb
+      MYSQL_ROOT_PASSWORD: pass
+    networks:
+      - smarttask-net
+ 
+   
+ 
+  app:
+    build: .
+    restart: always
+    container_name: app
+    ports:
+      - "8000:8000"
+    networks:
+      - smarttask-net  
+    env_file: ./env.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+          "spring.datasource.username" : "root",
+          "spring.datasource.password" : "pass",
+          "spring.datasource.url" : "jdbc:mysql://mysqldb:3306/smart_task",
+          "spring.mail.username" : "${EXT_SPRING_MAIL_USERNAME}",
+          "spring.mail.password" : "${EXT_SPRING_MAIL_PASSWORD}",
+          "spring.mail.host" : "${EXT_SPRING_MAIL_HOST}",
+          "spring.mail.port" : "${EXT_SPRING_MAIL_PORT}"
+        }'
+      SPRING_PROFILES_ACTIVE: dev  
+      TZ: Asia/Calcutta     
+    depends_on:
+      - mysqldb
+    
+volumes:
+  db-data:
+  
+  
+ 
+
+    
