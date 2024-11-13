@@ -67,7 +67,7 @@ public class WebSecurityConfig {
 
 
 
-                                     //   .anyRequest().permitAll()
+                                        .anyRequest().permitAll()
 
 
                         )
